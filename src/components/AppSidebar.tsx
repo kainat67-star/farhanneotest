@@ -190,7 +190,11 @@ export function AppSidebar() {
       <button
         type="button"
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2.5 rounded-xl glass-card text-foreground hover:bg-accent/50 transition-colors shadow-lg"
+        className="lg:hidden fixed z-50 rounded-xl glass-card p-2.5 text-foreground shadow-lg transition-colors hover:bg-accent/50"
+        style={{
+          top: "max(0.75rem, env(safe-area-inset-top))",
+          left: "max(0.75rem, env(safe-area-inset-left))",
+        }}
         aria-label="Open menu"
       >
         <Menu className="w-5 h-5" />
@@ -220,7 +224,7 @@ export function AppSidebar() {
               animate={{ x: 0 }}
               exit={{ x: -300 }}
               transition={{ type: "spring", damping: 28, stiffness: 320 }}
-              className={cn(asideClass, "lg:hidden w-[280px] shadow-2xl")}
+              className={cn(asideClass, "lg:hidden w-[min(280px,calc(100vw-1rem))] shadow-2xl")}
             >
               <button
                 type="button"

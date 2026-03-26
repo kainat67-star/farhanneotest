@@ -236,7 +236,7 @@ const Campaigns = () => {
         transition={{ delay: 0.08 }}
         className="glass-card overflow-hidden"
       >
-        <div className="overflow-x-auto">
+        <div className="touch-pan-x -mx-1 overflow-x-auto px-1 sm:mx-0 sm:px-0">
           <table className="w-full text-sm min-w-[1100px]">
             <thead className="sticky top-0 z-20 border-b border-border bg-card/90 backdrop-blur-md">
               <tr>

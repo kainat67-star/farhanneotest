@@ -112,19 +112,28 @@ const Settings = () => {
           </motion.h2>
           <motion.div variants={stagger.container} initial="initial" animate="animate" className="space-y-3">
             {connections.map((p) => (
-              <motion.div key={p.id} variants={stagger.item} className="glass-card-hover p-4 flex items-center gap-4">
-                <PlatformLogo color={p.color} name={p.name} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground">{p.name}</p>
-                  {p.connected ? (
-                    <p className="text-xs text-muted-foreground flex items-center gap-1"><Check className="w-3 h-3 text-primary" /> Connected{p.account ? ` · ${p.account}` : ""}</p>
-                  ) : (
-                    <p className="text-xs text-muted-foreground">Not connected</p>
-                  )}
+              <motion.div
+                key={p.id}
+                variants={stagger.item}
+                className="glass-card-hover flex flex-col gap-4 p-4 sm:flex-row sm:items-center"
+              >
+                <div className="flex min-w-0 flex-1 items-start gap-4">
+                  <PlatformLogo color={p.color} name={p.name} />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-foreground">{p.name}</p>
+                    {p.connected ? (
+                      <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Check className="h-3 w-3 shrink-0 text-primary" /> Connected
+                        {p.account ? ` · ${p.account}` : ""}
+                      </p>
+                    ) : (
+                      <p className="text-xs text-muted-foreground">Not connected</p>
+                    )}
+                  </div>
                 </div>
                 <button
                   onClick={() => toggleConnection(p.id)}
-                  className={`text-xs font-medium px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition-colors ${
+                  className={`flex w-full shrink-0 items-center justify-center gap-1.5 rounded-lg px-3.5 py-2.5 text-xs font-medium transition-colors sm:w-auto sm:py-2 ${
                     p.connected
                       ? "bg-danger/10 text-danger hover:bg-danger/20"
                       : "bg-primary/10 text-primary hover:bg-primary/20"
@@ -206,10 +215,10 @@ const Settings = () => {
               <Dropdown value={timezone} onChange={setTimezone} options={timezones} icon={Clock} />
             </div>
             {/* Dark Mode */}
-            <div className="flex items-center justify-between pt-1">
+            <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2">
                 {darkMode ? <Moon className="w-4 h-4 text-muted-foreground" /> : <Sun className="w-4 h-4 text-muted-foreground" />}
-                <div>
+                <div className="min-w-0">
                   <p className="text-sm font-medium text-foreground">Dark Mode</p>
                   <p className="text-[11px] text-muted-foreground">Use dark theme across the dashboard</p>
                 </div>
@@ -217,7 +226,7 @@ const Settings = () => {
               <button
                 type="button"
                 onClick={() => setTheme(darkMode ? "light" : "dark")}
-                className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors duration-200 ${
+                className={`relative inline-flex h-6 w-11 shrink-0 items-center self-start rounded-full transition-colors duration-200 sm:self-auto ${
                   darkMode ? "bg-primary" : "bg-muted"
                 }`}
               >

@@ -163,13 +163,13 @@ export function CommandPalette() {
             onClick={close}
             className="fixed inset-0 z-[60] bg-background/70 backdrop-blur-sm"
           />
-          <div className="fixed inset-0 z-[61] flex items-start justify-center pt-[18vh] px-4 pointer-events-none">
+          <div className="pointer-events-none fixed inset-0 z-[61] flex items-start justify-center px-3 pt-[max(4.5rem,12vh)] sm:px-4 sm:pt-[18vh]">
             <motion.div
               initial={{ opacity: 0, y: -16, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.99 }}
               transition={{ duration: 0.2 }}
-              className="w-full max-w-lg glass-card overflow-hidden shadow-2xl pointer-events-auto"
+              className="pointer-events-auto w-full max-w-lg overflow-hidden glass-card shadow-2xl"
               style={{ boxShadow: "0 24px 80px -12px hsl(0 0% 0% / 0.55), 0 0 60px -20px hsl(160 84% 39% / 0.12)" }}
             >
               <div className="flex items-center gap-3 px-4 py-3.5 border-b border-border/60">
@@ -186,7 +186,7 @@ export function CommandPalette() {
                 </kbd>
               </div>
 
-              <div className="py-1.5 max-h-72 overflow-y-auto">
+              <div className="max-h-[min(18rem,50vh)] overflow-y-auto py-1.5 sm:max-h-72">
                 {filtered.length === 0 && (
                   <p className="text-xs text-muted-foreground text-center py-8">No matching actions</p>
                 )}

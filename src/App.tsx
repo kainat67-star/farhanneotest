@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CommandPalette } from "@/components/CommandPalette";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { SupabaseAuthProvider, useAuth } from "@/hooks/useAuth";
 import { SidebarProvider } from "@/contexts/SidebarContext";
 import Index from "./pages/Index.tsx";
 import Channels from "./pages/Channels.tsx";
@@ -14,26 +14,30 @@ import Insights from "./pages/Insights.tsx";
 import Settings from "./pages/Settings.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Login from "./pages/Login.tsx";
+import Privacy from "./pages/Privacy.tsx";
+import Terms from "./pages/Terms.tsx";
 
 const queryClient = new QueryClient();
 
 function AuthenticatedCommandPalette() {
-  const { isAuthenticated } = useAuth();
-  if (!isAuthenticated) return null;
+  const { currentUser, loading } = useAuth();
+  if (loading || !currentUser) return null;
   return <CommandPalette />;
 }
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
+    <SupabaseAuthProvider>
       <SidebarProvider>
         <TooltipProvider delayDuration={200}>
           <Toaster />
           <Sonner richColors closeButton position="top-right" />
-          <BrowserRouter>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <AuthenticatedCommandPalette />
             <Routes>
               <Route path="/login" element={<Login />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/" element={<Index />} />
                 <Route path="/channels" element={<Channels />} />
@@ -46,7 +50,7 @@ const App = () => (
           </BrowserRouter>
         </TooltipProvider>
       </SidebarProvider>
-    </AuthProvider>
+    </SupabaseAuthProvider>
   </QueryClientProvider>
 );
 

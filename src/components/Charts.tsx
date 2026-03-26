@@ -1,8 +1,20 @@
 import { motion } from "framer-motion";
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar, PieChart, Pie, Cell, Legend,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
 } from "recharts";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const spendData = [
   { name: "Jan", google: 4200, meta: 3800, tiktok: 2400, snap: 1200, x: 800 },
@@ -49,9 +61,11 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   );
 };
 
-const chartCard = "glass-card p-6";
+const chartCard = "glass-card p-4 sm:p-6";
 
 export function SpendOverTimeChart() {
+  const isMobile = useIsMobile();
+  const chartH = isMobile ? 240 : 300;
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -64,7 +78,7 @@ export function SpendOverTimeChart() {
           <h3 className="chart-title">Ad Spend Over Time</h3>
           <p className="chart-subtitle">Monthly platform spend comparison</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-2 sm:gap-3">
           {[{ label: "Google", color: "#4285f4" }, { label: "Meta", color: "#1877f2" }, { label: "TikTok", color: "#fe2c55" }].map(l => (
             <div key={l.label} className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
               <div className="w-2 h-2 rounded-full" style={{ backgroundColor: l.color }} />
@@ -73,7 +87,7 @@ export function SpendOverTimeChart() {
           ))}
         </div>
       </div>
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={chartH}>
         <AreaChart data={spendData}>
           <defs>
             <linearGradient id="gGoogle" x1="0" y1="0" x2="0" y2="1">
@@ -103,6 +117,8 @@ export function SpendOverTimeChart() {
 }
 
 export function ChannelBarChart() {
+  const isMobile = useIsMobile();
+  const chartH = isMobile ? 240 : 300;
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -116,8 +132,8 @@ export function ChannelBarChart() {
           <p className="chart-subtitle">Return on ad spend per platform</p>
         </div>
       </div>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={channelData} barSize={32}>
+      <ResponsiveContainer width="100%" height={chartH}>
+        <BarChart data={channelData} barSize={isMobile ? 24 : 32}>
           <defs>
             <linearGradient id="roasGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="hsl(160 84% 45%)" stopOpacity={1} />
@@ -136,6 +152,10 @@ export function ChannelBarChart() {
 }
 
 export function SpendDistributionPie() {
+  const isMobile = useIsMobile();
+  const chartH = isMobile ? 220 : 280;
+  const innerR = isMobile ? 48 : 65;
+  const outerR = isMobile ? 78 : 105;
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -149,14 +169,14 @@ export function SpendDistributionPie() {
           <p className="chart-subtitle">Budget allocation by platform</p>
         </div>
       </div>
-      <ResponsiveContainer width="100%" height={280}>
+      <ResponsiveContainer width="100%" height={chartH}>
         <PieChart>
           <Pie
             data={pieData}
             cx="50%"
             cy="50%"
-            innerRadius={65}
-            outerRadius={105}
+            innerRadius={innerR}
+            outerRadius={outerR}
             paddingAngle={3}
             dataKey="value"
             animationBegin={300}

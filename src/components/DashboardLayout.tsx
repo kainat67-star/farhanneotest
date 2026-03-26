@@ -20,11 +20,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <AppSidebar />
       <main
         className={cn(
-          "min-h-screen transition-[margin] duration-300 ease-out",
+          "min-h-screen min-w-0 transition-[margin] duration-300 ease-out",
           collapsed ? "lg:ml-[88px]" : "lg:ml-[264px]",
         )}
       >
-        <div className="mx-auto flex w-full max-w-[1600px] flex-col px-5 pb-5 pt-16 md:px-8 md:pb-8 lg:px-10 lg:pb-10 lg:pt-6">
+        <div className="mx-auto flex w-full min-w-0 max-w-[1600px] flex-col px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-14 sm:px-5 sm:pb-5 sm:pt-16 md:px-8 md:pb-8 lg:px-10 lg:pb-10 lg:pt-6">
           <DashboardHeader />
           <AnimatePresence mode="wait">
             <motion.div

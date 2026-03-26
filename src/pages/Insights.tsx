@@ -117,16 +117,16 @@ const Insights = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="glass-card p-6 mb-6 relative overflow-hidden"
+        className="glass-card relative mb-6 overflow-hidden p-4 sm:p-6"
       >
         <div className="absolute top-0 right-0 w-64 h-64 opacity-[0.03] pointer-events-none">
           <Brain className="w-full h-full" />
         </div>
-        <div className="flex items-start gap-4">
-          <div className="p-2.5 rounded-xl bg-primary/10 shrink-0">
-            <Sparkles className="w-5 h-5 text-primary" />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+          <div className="shrink-0 rounded-xl bg-primary/10 p-2.5">
+            <Sparkles className="h-5 w-5 text-primary" />
           </div>
-          <div>
+          <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-2">
               <h2 className="text-base font-semibold text-foreground">Account health summary</h2>
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">Live</span>
@@ -138,9 +138,13 @@ const Insights = () => {
               TikTok remains your most cost-efficient channel at <span className="text-foreground font-medium">$0.42 CPC</span>.
               Recommend shifting 15% of X Ads budget to TikTok and pausing the underperforming "Promoted Tweets Q3" campaign.
             </p>
-            <div className="flex items-center gap-4 mt-4 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-primary" /> Analyzed 10 campaigns</span>
-              <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-primary" /> 5 platforms scanned</span>
+            <div className="mt-4 flex flex-col gap-2 text-xs text-muted-foreground sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-4 sm:gap-y-1">
+              <span className="flex items-center gap-1">
+                <CheckCircle2 className="h-3 w-3 shrink-0 text-primary" /> Analyzed 10 campaigns
+              </span>
+              <span className="flex items-center gap-1">
+                <CheckCircle2 className="h-3 w-3 shrink-0 text-primary" /> 5 platforms scanned
+              </span>
               <span>Updated 2 min ago</span>
             </div>
           </div>

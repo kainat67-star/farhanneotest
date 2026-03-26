@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Area,
   Brush,
@@ -69,6 +70,8 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export function PerformanceTimeline() {
+  const isMobile = useIsMobile();
+  const chartHeight = isMobile ? 260 : 340;
   const [activeMetrics, setActiveMetrics] = useState<Set<string>>(new Set(["spend", "revenue", "conversions"]));
   const [range, setRange] = useState<(typeof ranges)[number]>("30D");
 
@@ -90,7 +93,7 @@ export function PerformanceTimeline() {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.25 }}
-      className="glass-card p-6"
+      className="glass-card p-4 sm:p-6"
     >
       <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-5">
         <div>
@@ -135,8 +138,8 @@ export function PerformanceTimeline() {
         </div>
       </div>
 
-      <ResponsiveContainer width="100%" height={340}>
-        <ComposedChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 4 }}>
+      <ResponsiveContainer width="100%" height={chartHeight}>
+        <ComposedChart data={data} margin={{ top: 8, right: isMobile ? 6 : 12, left: 0, bottom: 4 }}>
           <defs>
             {metrics.map((m) => (
               <linearGradient key={m.key} id={`area-${m.key}`} x1="0" y1="0" x2="0" y2="1">

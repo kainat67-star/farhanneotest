@@ -109,18 +109,18 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: loading ? 0 : 0.45 }}
-            className="glass-card-hover p-6"
+            className="glass-card-hover p-4 sm:p-6"
           >
             <div className="chart-header">
-              <div>
+              <div className="min-w-0">
                 <h3 className="chart-title">Top campaigns</h3>
                 <p className="chart-subtitle">Highest ROAS in the selected period</p>
               </div>
               <button
                 type="button"
-                className="text-xs text-primary hover:text-primary/80 font-medium flex items-center gap-1 transition-colors hover:gap-1.5"
+                className="flex shrink-0 items-center gap-1 text-xs font-medium text-primary transition-colors hover:gap-1.5 hover:text-primary/80"
               >
-                View all <ArrowRight className="w-3 h-3" />
+                View all <ArrowRight className="h-3 w-3" />
               </button>
             </div>
 
@@ -131,11 +131,18 @@ const Dashboard = () => {
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: loading ? 0 : 0.55 + i * 0.05 }}
-                  className="flex items-center justify-between p-4 rounded-xl bg-accent/15 hover:bg-accent/30 transition-all duration-200 cursor-pointer group border border-transparent hover:border-border/60"
+                  className="flex cursor-pointer flex-wrap items-center justify-between gap-3 rounded-xl border border-transparent bg-accent/15 p-3 transition-all duration-200 hover:border-border/60 hover:bg-accent/30 group sm:flex-nowrap sm:p-4"
                 >
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">{campaign.name}</p>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">{campaign.channel}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
+                      {campaign.name}
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-muted-foreground">{campaign.channel}</p>
+                    <p className="mt-1 text-[11px] tabular-nums text-muted-foreground sm:hidden">
+                      <span className="font-medium text-foreground">{campaign.spend}</span>
+                      <span className="mx-1.5 text-border">·</span>
+                      <span className="metric-positive font-medium">{campaign.roas}</span>
+                    </p>
                   </div>
                   <div className="text-right mx-5 hidden sm:block">
                     <p className="text-sm font-semibold text-foreground tabular-nums">{campaign.spend}</p>

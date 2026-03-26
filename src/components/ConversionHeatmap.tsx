@@ -34,7 +34,7 @@ export function ConversionHeatmap() {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className="glass-card p-6"
+      className="glass-card p-4 sm:p-6"
     >
       <div className="chart-header">
         <div>
@@ -52,7 +52,7 @@ export function ConversionHeatmap() {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="touch-pan-x overflow-x-auto">
         <div className="min-w-[360px]">
           {/* Header row */}
           <div className="flex items-center mb-1.5">

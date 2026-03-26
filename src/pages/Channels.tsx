@@ -15,6 +15,7 @@ import {
   Sector,
 } from "recharts";
 import { useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const platforms = [
   { name: "Meta Ads", spend: 33600, revenue: 127680, conversions: 4100, roas: 3.8, color: "#1877f2", short: "Meta" },
@@ -68,6 +69,11 @@ function PlatformLegendBadge({ color, short, full }: { color: string; short: str
 }
 
 const Channels = () => {
+  const isMobile = useIsMobile();
+  const pieChartH = isMobile ? 260 : 320;
+  const pieInner = isMobile ? 56 : 72;
+  const pieOuter = isMobile ? 88 : 108;
+  const barChartH = isMobile ? 260 : 320;
   const total = platforms.reduce((s, p) => s + p.spend, 0);
   const [activeIndex, setActiveIndex] = useState<number | undefined>(undefined);
 
@@ -114,11 +120,11 @@ const Channels = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08 }}
-          className="glass-card p-6"
+          className="glass-card p-4 sm:p-6"
         >
           <h3 className="text-sm font-semibold text-foreground mb-0.5">Budget allocation</h3>
           <p className="text-xs text-muted-foreground mb-4">Share of spend by platform · Total ${total.toLocaleString()}</p>
-          <ResponsiveContainer width="100%" height={320}>
+          <ResponsiveContainer width="100%" height={pieChartH}>
             <PieChart>
               <defs>
                 {pieData.map((entry, i) => (
@@ -132,8 +138,8 @@ const Channels = () => {
                 data={pieData}
                 cx="50%"
                 cy="50%"
-                innerRadius={72}
-                outerRadius={108}
+                innerRadius={pieInner}
+                outerRadius={pieOuter}
                 paddingAngle={4}
                 dataKey="value"
                 animationBegin={180}
@@ -161,11 +167,11 @@ const Channels = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.14 }}
-          className="glass-card p-6"
+          className="glass-card p-4 sm:p-6"
         >
           <h3 className="text-sm font-semibold text-foreground mb-0.5">Spend vs revenue</h3>
           <p className="text-xs text-muted-foreground mb-4">Grouped comparison by platform</p>
-          <ResponsiveContainer width="100%" height={320}>
+          <ResponsiveContainer width="100%" height={barChartH}>
             <BarChart data={barData} barGap={6}>
               <defs>
                 <linearGradient id="bar-spend" x1="0" y1="0" x2="0" y2="1">
@@ -198,16 +204,19 @@ const Channels = () => {
         transition={{ delay: 0.2 }}
         className="glass-card overflow-hidden"
       >
-        <div className="px-5 py-4 border-b border-border/80">
+        <div className="border-b border-border/80 px-4 py-3 sm:px-5 sm:py-4">
           <h3 className="text-sm font-semibold text-foreground">Platform breakdown</h3>
           <p className="text-[11px] text-muted-foreground mt-0.5">Aligned with connected accounts in Settings</p>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+        <div className="touch-pan-x overflow-x-auto">
+          <table className="w-full min-w-[520px] text-sm">
             <thead>
               <tr className="border-b border-border bg-accent/15">
                 {["Platform", "Spend", "Revenue", "Conversions", "ROAS"].map((h) => (
-                  <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                  <th
+                    key={h}
+                    className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground sm:px-5"
+                  >
                     {h}
                   </th>
                 ))}
@@ -222,13 +231,19 @@ const Channels = () => {
                   transition={{ delay: 0.22 + i * 0.04 }}
                   className="border-b border-border/50 hover:bg-accent/20 transition-colors"
                 >
-                  <td className="px-5 py-3">
+                  <td className="px-3 py-3 sm:px-5">
                     <PlatformLegendBadge color={p.color} short={p.short} full={p.name} />
                   </td>
-                  <td className="px-5 py-3 text-foreground tabular-nums font-medium">${p.spend.toLocaleString()}</td>
-                  <td className="px-5 py-3 metric-positive tabular-nums font-semibold">${p.revenue.toLocaleString()}</td>
-                  <td className="px-5 py-3 text-muted-foreground tabular-nums">{p.conversions.toLocaleString()}</td>
-                  <td className="px-5 py-3">
+                  <td className="px-3 py-3 text-foreground tabular-nums font-medium sm:px-5">
+                    ${p.spend.toLocaleString()}
+                  </td>
+                  <td className="metric-positive px-3 py-3 font-semibold tabular-nums sm:px-5">
+                    ${p.revenue.toLocaleString()}
+                  </td>
+                  <td className="px-3 py-3 text-muted-foreground tabular-nums sm:px-5">
+                    {p.conversions.toLocaleString()}
+                  </td>
+                  <td className="px-3 py-3 sm:px-5">
                     <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">{p.roas}x</span>
                   </td>
                 </motion.tr>

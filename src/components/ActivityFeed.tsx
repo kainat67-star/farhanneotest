@@ -16,7 +16,7 @@ export function ActivityFeed() {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.6 }}
-      className="glass-card p-6"
+      className="glass-card p-4 sm:p-6"
     >
       <div className="chart-header">
         <div>

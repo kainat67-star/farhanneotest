@@ -2,7 +2,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Bell, LogOut, Settings } from "lucide-react";
 import { toast } from "sonner";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { signOutUser } from "@/lib/auth";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,51 +24,83 @@ const PAGE_META: Record<
   "/": {
     title: "Dashboard",
     subtitle: "Cross-channel advertising performance at a glance",
-    titleClassName: "text-[28px] font-extrabold text-foreground tracking-tight leading-none",
+    titleClassName:
+      "text-2xl font-extrabold text-foreground tracking-tight leading-none sm:text-[26px] lg:text-[28px]",
   },
   "/channels": {
     title: "Channel comparison",
     subtitle: "Budget allocation and spend vs revenue across ad platforms",
-    titleClassName: "text-2xl font-bold text-foreground tracking-tight",
+    titleClassName: "text-xl font-bold text-foreground tracking-tight sm:text-2xl",
   },
   "/campaigns": {
     title: "Campaign Details",
     subtitle: "Search, filter, and drill into performance by campaign",
-    titleClassName: "text-[28px] font-extrabold text-foreground tracking-tight leading-none",
+    titleClassName:
+      "text-2xl font-extrabold text-foreground tracking-tight leading-none sm:text-[26px] lg:text-[28px]",
   },
   "/insights": {
     title: "Insights & Recommendations",
     subtitle: "AI-powered analysis of your advertising performance",
-    titleClassName: "text-2xl font-bold text-foreground tracking-tight",
+    titleClassName: "text-xl font-bold text-foreground tracking-tight sm:text-2xl",
   },
   "/settings": {
     title: "Settings",
     subtitle: "Manage integrations, account, and preferences",
-    titleClassName: "text-2xl font-bold text-foreground tracking-tight",
+    titleClassName: "text-xl font-bold text-foreground tracking-tight sm:text-2xl",
   },
 };
 
 const defaultMeta = PAGE_META["/"];
 
+function profileInitials(email: string | undefined): string {
+  if (!email) return "?";
+  const local = email.split("@")[0] ?? email;
+  const parts = local.replace(/[^a-zA-Z0-9]/g, " ").trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return (parts[0]![0]! + parts[1]![0]!).toUpperCase();
+  }
+  return local.slice(0, 2).toUpperCase();
+}
+
+function displayName(email: string | undefined): string {
+  if (!email) return "Account";
+  const local = email.split("@")[0];
+  return local && local.length > 0 ? local : email;
+}
+
 export function DashboardHeader() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { currentUser } = useAuth();
   const meta = PAGE_META[pathname] ?? defaultMeta;
 
-  const handleLogout = () => {
-    logout();
-    toast.success("Signed out", { description: "You have been logged out successfully." });
-    navigate("/login", { replace: true });
+  const userEmail = currentUser?.email;
+  const initials = profileInitials(userEmail);
+  const nameLine = displayName(userEmail);
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await signOutUser();
+      if (error) {
+        toast.error("Sign out failed", { description: error.message });
+        return;
+      }
+      toast.success("Signed out", { description: "You have been logged out successfully." });
+      navigate("/login", { replace: true });
+    } catch (err) {
+      toast.error("Sign out failed", {
+        description: err instanceof Error ? err.message : "Unknown error",
+      });
+    }
   };
 
   return (
     <header className="flex w-full flex-col">
       {/* Layer 1: Top bar — same horizontal margins as main; aligns with sidebar logo row (lg) */}
-      <div className="flex w-full min-h-[64px] shrink-0 items-center justify-between gap-4 border-b border-border/50 lg:min-h-[72px]">
+      <div className="flex w-full min-h-[64px] shrink-0 items-center justify-between gap-3 border-b border-border/50 pl-12 lg:min-h-[72px] lg:pl-0">
         <div className="min-w-0 flex-1" aria-hidden />
         <nav
-          className="flex shrink-0 items-center justify-end gap-3.5 sm:gap-4"
+          className="flex min-w-0 shrink-0 items-center justify-end gap-2 sm:gap-3.5 md:gap-4"
           aria-label="Account and preferences"
         >
           <DropdownMenu>
@@ -82,7 +115,10 @@ export function DashboardHeader() {
                 <Bell className="h-5 w-5" strokeWidth={2} />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
+            <DropdownMenuContent
+              align="end"
+              className="w-[min(20rem,calc(100vw-2rem))] sm:w-80"
+            >
               <DropdownMenuLabel className="text-sm font-semibold">Notifications</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <div className="px-2 py-6 text-center text-xs text-muted-foreground">
@@ -118,13 +154,16 @@ export function DashboardHeader() {
                 className="h-12 w-12 min-h-[48px] min-w-[48px] shrink-0 rounded-full border border-border/50 flex items-center justify-center text-sm font-bold tracking-tight text-primary bg-gradient-to-br from-primary/35 to-primary/12 shadow-sm shadow-black/10 ring-1 ring-border/40 hover:from-primary/48 hover:to-primary/24 hover:ring-border/70 hover:shadow-md hover:shadow-black/15 transition-all duration-200 ease-out hover:scale-[1.03] active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background"
                 aria-label="Profile menu"
               >
-                JD
+                {initials}
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent
+              align="end"
+              className="w-[min(14rem,calc(100vw-2rem))] sm:w-56"
+            >
               <DropdownMenuLabel className="font-normal">
-                <p className="text-sm font-semibold text-foreground">John Doe</p>
-                <p className="text-xs text-muted-foreground font-normal truncate">john@company.com</p>
+                <p className="text-sm font-semibold text-foreground">{nameLine}</p>
+                <p className="text-xs text-muted-foreground font-normal truncate">{userEmail ?? "—"}</p>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -140,7 +179,7 @@ export function DashboardHeader() {
       </div>
 
       {/* Layer 2: Page title — below top bar, separated from chrome controls */}
-      <div className="w-full border-b border-border/40 pt-8 pb-6">
+      <div className="w-full min-w-0 border-b border-border/40 pt-6 pb-5 sm:pt-8 sm:pb-6">
         <motion.div
           key={pathname}
           initial={{ opacity: 0, x: -8 }}
@@ -149,7 +188,7 @@ export function DashboardHeader() {
           className="min-w-0"
         >
           <h1 className={cn(meta.titleClassName)}>{meta.title}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">{meta.subtitle}</p>
+          <p className="mt-2 text-xs text-muted-foreground sm:text-sm">{meta.subtitle}</p>
         </motion.div>
       </div>
     </header>
